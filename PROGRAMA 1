@@ -10,6 +10,20 @@ public:
     int clave;
 
     Empleado(string _nombre = "", int _clave = 0) : nombre(_nombre), clave(_clave) {}
+
+
+    //SOBRE CARGA
+    bool operator==(const Empleado& otro) const//COMPARACION DE CLAVES
+    {
+        return clave == otro.clave;
+    }
+
+    friend ostream& operator<<(ostream& o, const Empleado& emp)
+    {
+        o<<"\nCLAVE: " << emp.clave
+        << "\nNOMBRE: " << emp.nombre;
+        return o;
+    }
 };
 
 class ListaEstatica {
@@ -107,9 +121,12 @@ int main() {
                 cout << "NOMBRE: ";
                 cin.ignore();
                 getline(cin, emp.nombre);
-                if (listaEmpleados.Agrega(emp)) {
+                if (listaEmpleados.Agrega(emp))
+                {
                     cout << "EMPLEADO AGREGADO" << endl;
-                } else {
+                }
+                else
+                {
                     cout << "ERROR AL AGREGAR AL FULANITO... SERA REDIRIGIDO AL MENU" << endl;
                 }
                 break;
@@ -119,16 +136,21 @@ int main() {
                 posicion = listaEmpleados.Busca(emp);
                 if (posicion != -1) {
                     cout << "EL EMPLEADO ESTA EN LA POSICION: " << posicion << endl;
-                } else {
+                }
+                else
+                {
                     cout << "EMPLEADO NO ENCONTRADO" << endl;
                 }
                 break;
             case 3:
                 cout << "POSICION DEL EMPLEADO A ELIMINAR: ";
                 cin >> posicion;
-                if (listaEmpleados.Elimina(posicion)) {
+                if (listaEmpleados.Elimina(posicion))
+                {
                     cout << "SE ELIMINA" << endl;
-                } else {
+                }
+                else
+                {
                     cout << "ERROR EN LA ELIMINACION" << endl;
                 }
                 break;
