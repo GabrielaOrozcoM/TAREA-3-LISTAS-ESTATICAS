@@ -1,0 +1,161 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+#define tam_max 10
+
+class Empleado {
+public:
+    string nombre;
+    int clave;
+
+    Empleado(string _nombre = "", int _clave = 0) : nombre(_nombre), clave(_clave) {}
+};
+
+class ListaEstatica {
+private:
+    Empleado lista[tam_max];
+    int tam_actual;
+
+public:
+    ListaEstatica() : tam_actual(0) {}
+
+    int Inserta(Empleado elemento, int posicion) {
+        if (posicion < 0 || posicion > tam_actual || Llena()) {
+            return 0;  // NOSE INSERTA NADA
+        }
+
+        for (int i = tam_actual; i > posicion; --i) {
+            lista[i] = lista[i - 1];
+        }
+
+        lista[posicion] = elemento;
+        ++tam_actual;
+        return 1;  // EXITO
+    }
+
+    int Agrega(Empleado elemento) {
+        return Inserta(elemento, tam_actual);  // INSERTADO AL FINAL
+    }
+
+    int Busca(Empleado elemento) {
+        for (int i = 0; i < tam_actual; ++i) {
+            if (lista[i].clave == elemento.clave) {
+                return i;  // EMPLEADO ENCONTRADO
+            }
+        }
+        return -1;  // NO SE ENCUENTRA EL EMPLEADO
+    }
+
+    int Elimina(int posicion) {
+        if (posicion < 0 || posicion >= tam_actual || Vacia()) {
+            return 0;  // No se puede eliminar
+        }
+
+        for (int i = posicion; i < tam_actual - 1; ++i) {
+            lista[i] = lista[i + 1];
+        }
+
+        --tam_actual;
+
+        return 1;  //ELIMINADO
+    }
+
+    int Vacia() {
+        return tam_actual == 0;
+    }
+
+    int Llena() {
+        return tam_actual == tam_max;
+    }
+
+    int Muestra() {
+        if (Vacia()) {
+            cout << "La lista está vacía." << endl;
+            return 0;
+        }
+
+        cout << "Lista de empleados:" << endl;
+        for (int i = 0; i < tam_actual; ++i) {
+            cout << "Clave: " << lista[i].clave << ", Nombre: " << lista[i].nombre << endl;
+        }
+        return 1;
+    }
+};
+
+int main() {
+    ListaEstatica listaEmpleados;
+    int opcion;
+    Empleado emp;
+    int posicion;
+
+    do {
+        cout << "\nMenu:\n";
+        cout << "1. AGREGAR\n";
+        cout << "2. BUSCAR\n";
+        cout << "3. ELIMINAR\n";
+        cout << "4. INSERTAR\n";//BETA
+        cout << "5. MOSTRAR EMPLEADOS\n";
+        cout << "6. SALIR\n";
+        cout << "OPCION: ";
+        cin >> opcion;
+
+        switch (opcion) {
+            case 1:
+                cout << "CLAVE: ";
+                cin >> emp.clave;
+                cout << "NOMBRE: ";
+                cin.ignore();
+                getline(cin, emp.nombre);
+                if (listaEmpleados.Agrega(emp)) {
+                    cout << "EMPLEADO AGREGADO" << endl;
+                } else {
+                    cout << "ERROR AL AGREGAR AL FULANITO... SERA REDIRIGIDO AL MENU" << endl;
+                }
+                break;
+            case 2:
+                cout << "CLAVE: ";
+                cin >> emp.clave;
+                posicion = listaEmpleados.Busca(emp);
+                if (posicion != -1) {
+                    cout << "EL EMPLEADO ESTA EN LA POSICION: " << posicion << endl;
+                } else {
+                    cout << "EMPLEADO NO ENCONTRADO" << endl;
+                }
+                break;
+            case 3:
+                cout << "POSICION DEL EMPLEADO A ELIMINAR: ";
+                cin >> posicion;
+                if (listaEmpleados.Elimina(posicion)) {
+                    cout << "SE ELIMINA" << endl;
+                } else {
+                    cout << "ERROR EN LA ELIMINACION" << endl;
+                }
+                break;
+            case 4:
+                cout << "CLAVE: ";
+                cin >> emp.clave;
+                cout << "NOMBRE: ";
+                cin.ignore();
+                getline(cin, emp.nombre);
+                cout << "POSICION DE INSERCION: ";
+                cin >> posicion;
+                if (listaEmpleados.Inserta(emp, posicion)) {
+                    cout << "INSERTADO CON EXITO" << endl;
+                } else {
+                    cout << "ERROR AL INSERTAR" << endl;
+                }
+                break;
+            case 5:
+                listaEmpleados.Muestra();
+                break;
+            case 6:
+                cout << "BAIS..." << endl;
+                break;
+            default:
+                cout << "OPCION INVALIDA." << endl;
+        }
+    } while (opcion != 6);
+
+    return 0;
+}
